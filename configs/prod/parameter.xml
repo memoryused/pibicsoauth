@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<parameter>
+    <application>
+    	<enableSQLParameterizedDebug>true</enableSQLParameterizedDebug>
+    	<enableSQLParameterizedParamDebug>true</enableSQLParameterizedParamDebug>
+    	<tokenExpireTime>60</tokenExpireTime>	<!-- Minute -->
+    </application>
+    
+    <certification>
+    	<publicKeyFile>/opt/data/keys/pibicsoauth.cer</publicKeyFile>
+    	<privateKeyFile>/opt/data/keys/pibicsoauth.p12</privateKeyFile>
+    	<alias>pibicsoauth</alias>
+    	<pwd>Fl,k4k</pwd>
+    </certification>
+    
+    <database>
+        <key>pibicsoauth</key>
+    	<databaseType>mysql</databaseType>
+        <jndi>true</jndi>
+        <lookup>jdbc/pibicsoauth</lookup>
+        <schemas>[CON]:LOG</schemas>
+    </database>
+    
+    	<!-- สำหรับแสดง version ที่หน้า Monitor และ Footer -->
+	<monitorApplication>
+		<appVersion>@appVersionNumber@_build_@buildNumber@</appVersion>
+		<pathFileVersion>/</pathFileVersion>
+		<fileNameVersion>version.txt</fileNameVersion>
+	</monitorApplication>
+</parameter>

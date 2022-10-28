@@ -1,0 +1,479 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>sit.project.pibics-ma.pom</groupId>
+		<artifactId>pom-api</artifactId>
+		<version>1.0.2</version>
+	</parent>
+	
+	<groupId>project.pibics</groupId>
+	<artifactId>pibicsoauth</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<properties>
+		<project.web-config-war>pibicsoauth</project.web-config-war>
+		<project.web-config-dev>configs/dev</project.web-config-dev>
+		<project.web-config-cer>configs/cer</project.web-config-cer>
+		<project.web-config-pre>configs/pre</project.web-config-pre>
+		<project.web-config-prod>configs/prod</project.web-config-prod>
+		<project.web-context>src/main/webapp</project.web-context>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>all</id>
+			<name>all</name>
+			<url>http://10.100.70.68:8088/repository/all/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>system.tomcat</groupId>
+			<artifactId>tomcat-10_0_12</artifactId>
+			<version>1.1</version>
+			<type>pom</type>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>DEV</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.7.0</version>
+						<configuration>
+							<forceJavacCompilerUse>true</forceJavacCompilerUse>
+							<useIncrementalCompilation>false</useIncrementalCompilation>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12.4</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.2.2</version>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-config</id>
+								<phase>prepare-package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. -->
+										<copy file="${project.web-config-dev}/context.xml" todir="${project.web-context}/META-INF" overwrite="true" />
+										<copy file="${project.web-config-dev}/index.html" todir="${project.web-context}/" overwrite="true" />
+										<copy file="${project.web-config-dev}/log4j2.xml" todir="${project.web-context}/WEB-INF/classes" overwrite="true" />
+										<copy file="${project.web-config-dev}/parameter.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+										<copy file="${project.web-config-dev}/web.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>copy-war</id>
+								<phase>package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. <copy file="${project.basedir}/target/dev/${project.web-config-war-wec}-dev.war" 
+											todir="${project.web-config-dev-wec}/" overwrite="true" /> -->
+										<copy file="${project.basedir}/target/dev/${project.web-config-war}-dev.war" todir="${project.web-config-dev}/" overwrite="true" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<defaultGoal>clean package</defaultGoal>
+				<finalName>${project.web-config-war}-dev</finalName>
+				<directory>${project.basedir}/target/dev</directory>
+			</build>
+		</profile>
+
+		<profile>
+			<id>CER</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.7.0</version>
+						<configuration>
+							<forceJavacCompilerUse>true</forceJavacCompilerUse>
+							<useIncrementalCompilation>false</useIncrementalCompilation>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12.4</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.2.2</version>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-config</id>
+								<phase>prepare-package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. -->
+										<copy file="${project.web-config-cer}/context.xml" todir="${project.web-context}/META-INF" overwrite="true" />
+										<copy file="${project.web-config-cer}/index.html" todir="${project.web-context}/" overwrite="true" />
+										<copy file="${project.web-config-cer}/log4j2.xml" todir="${project.web-context}/WEB-INF/classes" overwrite="true" />
+										<copy file="${project.web-config-cer}/parameter.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+										<copy file="${project.web-config-cer}/web.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>copy-war</id>
+								<phase>package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. <copy file="${project.basedir}/target/dev/${project.web-config-war-wec}-dev.war" 
+											todir="${project.web-config-dev-wec}/" overwrite="true" /> -->
+										<copy file="${project.basedir}/target/cer/${project.web-config-war}.war" todir="${project.web-config-cer}/" overwrite="true" />
+										<copy file="${project.web-config-cer}/${project.web-config-war}.war" todir="installation/CER/web" overwrite="true"/>
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<defaultGoal>clean package</defaultGoal>
+				<finalName>${project.web-config-war}</finalName>
+				<directory>${project.basedir}/target/cer</directory>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>PRE</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.7.0</version>
+						<configuration>
+							<forceJavacCompilerUse>true</forceJavacCompilerUse>
+							<useIncrementalCompilation>false</useIncrementalCompilation>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12.4</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.2.2</version>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-config</id>
+								<phase>prepare-package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. -->
+										<copy file="${project.web-config-pre}/context.xml" todir="${project.web-context}/META-INF" overwrite="true" />
+										<copy file="${project.web-config-pre}/parameter.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+										<copy file="${project.web-config-pre}/index.html" todir="${project.web-context}/" overwrite="true" />
+										<copy file="${project.web-config-pre}/log4j2.xml" todir="${project.web-context}/WEB-INF/classes" overwrite="true" />
+										<copy file="${project.web-config-pre}/web.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>copy-war</id>
+								<phase>package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. <copy file="${project.basedir}/target/dev/${project.web-config-war-wec}-dev.war" 
+											todir="${project.web-config-dev-wec}/" overwrite="true" /> -->
+										<copy file="${project.basedir}/target/pre/${project.web-config-war}-pre.war" todir="${project.web-config-pre}/" overwrite="true" />
+										<copy file="${project.web-config-pre}/${project.web-config-war}-pre.war" todir="installation/PRE/web" overwrite="true"/>
+										<!-- <copy file="${project.web-config-prod-appserve1}/${project.web-config-war}.war" todir="installation/PRD/DR/web" overwrite="true"/> -->
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<defaultGoal>clean package</defaultGoal>
+				<finalName>${project.web-config-war}-pre</finalName>
+				<directory>${project.basedir}/target/pre</directory>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>PRODDC1</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.7.0</version>
+						<configuration>
+							<forceJavacCompilerUse>true</forceJavacCompilerUse>
+							<useIncrementalCompilation>false</useIncrementalCompilation>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12.4</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.2.2</version>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-config</id>
+								<phase>prepare-package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. -->
+										<copy file="${project.web-config-prod}/dc1/context.xml" todir="${project.web-context}/META-INF" overwrite="true" />
+										<copy file="${project.web-config-prod}/dc1/parameter.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+										<copy file="${project.web-config-prod}/index.html" todir="${project.web-context}/" overwrite="true" />
+										<copy file="${project.web-config-prod}/log4j2.xml" todir="${project.web-context}/WEB-INF/classes" overwrite="true" />
+										<copy file="${project.web-config-prod}/web.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>copy-war</id>
+								<phase>package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. <copy file="${project.basedir}/target/dev/${project.web-config-war-wec}-dev.war" 
+											todir="${project.web-config-dev-wec}/" overwrite="true" /> -->
+										<copy file="${project.basedir}/target/prod/dc1/${project.web-config-war}.war" todir="${project.web-config-prod}/dc1/" overwrite="true" />
+										<copy file="${project.web-config-prod}/dc1/${project.web-config-war}.war" todir="installation/PRD/DC1/web" overwrite="true"/>
+										<!-- <copy file="${project.web-config-prod-appserve1}/${project.web-config-war}.war" todir="installation/PRD/DR/web" overwrite="true"/> -->
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<defaultGoal>clean package</defaultGoal>
+				<finalName>${project.web-config-war}</finalName>
+				<directory>${project.basedir}/target/prod/dc1</directory>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>PRODDC2</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.7.0</version>
+						<configuration>
+							<forceJavacCompilerUse>true</forceJavacCompilerUse>
+							<useIncrementalCompilation>false</useIncrementalCompilation>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12.4</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.2.2</version>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-config</id>
+								<phase>prepare-package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. -->
+										<copy file="${project.web-config-prod}/dc2/context.xml" todir="${project.web-context}/META-INF" overwrite="true" />
+										<copy file="${project.web-config-prod}/dc2/parameter.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+										<copy file="${project.web-config-prod}/index.html" todir="${project.web-context}/" overwrite="true" />
+										<copy file="${project.web-config-prod}/log4j2.xml" todir="${project.web-context}/WEB-INF/classes" overwrite="true" />
+										<copy file="${project.web-config-prod}/web.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>copy-war</id>
+								<phase>package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. <copy file="${project.basedir}/target/dev/${project.web-config-war-wec}-dev.war" 
+											todir="${project.web-config-dev-wec}/" overwrite="true" /> -->
+										<copy file="${project.basedir}/target/prod/dc2/${project.web-config-war}.war" todir="${project.web-config-prod}/dc2/" overwrite="true" />
+										<copy file="${project.web-config-prod}/dc2/${project.web-config-war}.war" todir="installation/PRD/DC2/web" overwrite="true"/>
+										<!-- <copy file="${project.web-config-prod-appserve2}/${project.web-config-war}.war" todir="installation/PRD/DR/web" overwrite="true"/> -->
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<defaultGoal>clean package</defaultGoal>
+				<finalName>${project.web-config-war}</finalName>
+				<directory>${project.basedir}/target/prod/dc2</directory>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>PRODDR</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.7.0</version>
+						<configuration>
+							<forceJavacCompilerUse>true</forceJavacCompilerUse>
+							<useIncrementalCompilation>false</useIncrementalCompilation>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12.4</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.2.2</version>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-config</id>
+								<phase>prepare-package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. -->
+										<copy file="${project.web-config-prod}/dr/context.xml" todir="${project.web-context}/META-INF" overwrite="true" />
+										<copy file="${project.web-config-prod}/dr/parameter.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+										<copy file="${project.web-config-prod}/index.html" todir="${project.web-context}/" overwrite="true" />
+										<copy file="${project.web-config-prod}/log4j2.xml" todir="${project.web-context}/WEB-INF/classes" overwrite="true" />
+										<copy file="${project.web-config-prod}/web.xml" todir="${project.web-context}/WEB-INF" overwrite="true" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>copy-war</id>
+								<phase>package</phase>
+								<configuration>
+									<tasks>
+										<!-- Place any Ant task here. You can add anything you can add 
+											between <target> and </target> in a build.xml. <copy file="${project.basedir}/target/dev/${project.web-config-war-wec}-dev.war" 
+											todir="${project.web-config-dev-wec}/" overwrite="true" /> -->
+										<copy file="${project.basedir}/target/prod/dr/${project.web-config-war}.war" todir="${project.web-config-prod}/dr/" overwrite="true" />
+										<copy file="${project.web-config-prod}/dr/${project.web-config-war}.war" todir="installation/PRD/DR/web" overwrite="true"/>
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<defaultGoal>clean package</defaultGoal>
+				<finalName>${project.web-config-war}</finalName>
+				<directory>${project.basedir}/target/prod/dr</directory>
+			</build>
+		</profile>
+		
+	</profiles>
+</project>

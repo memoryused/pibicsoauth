@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+	<Properties>
+		<Property name="baseDir">/opt/log/pibicsoauth</Property>
+	</Properties>
+	<Appenders>
+	
+		<Console name="LogConsole" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] (%F:%L) %M %msg%n" />
+		</Console>
+
+		<RollingFile name="LogINITIAL" fileName="${baseDir}/INITIAL.log"
+			filePattern="${baseDir}/&#36;&#36;{date:yyyy-MM-dd}/INITIAL-%d{yyyy-MM-dd-HH}-%i.log.gz">
+			<PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] (%F:%L) %M %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+				<SizeBasedTriggeringPolicy size="20 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="50">
+				<Delete basePath="${baseDir}" maxDepth="3">
+					<IfFileName glob="*/*.log.gz">
+						<IfLastModified age="10d" />
+					</IfFileName>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+		<RollingFile name="LogCredentialsWS" fileName="${baseDir}/CredentialsWS.log"
+			filePattern="${baseDir}/&#36;&#36;{date:yyyy-MM-dd}/CredentialsWS-%d{yyyy-MM-dd-HH}-%i.log.gz">
+			<PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] (%F:%L) %M %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+				<SizeBasedTriggeringPolicy size="20 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="50">
+				<Delete basePath="${baseDir}" maxDepth="3">
+					<IfFileName glob="*/*.log.gz">
+						<IfLastModified age="10d" />
+					</IfFileName>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="INITIAL" level="DEBUG">
+			<AppenderRef ref="LogINITIAL" />
+		</Logger>
+		<Logger name="CredentialsWS" level="DEBUG">
+			<AppenderRef ref="LogCredentialsWS" />
+		</Logger>
+		<Root level="DEBUG">
+			<AppenderRef ref="LogConsole" />
+		</Root>
+	</Loggers>
+</Configuration>

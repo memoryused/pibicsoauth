@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="addVersionNumber" name="autoreject">
+	<property environment="env" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="14" />
+	<property name="source" value="14" />
+
+	<target name="addVersionNumber">
+		<echo message="${env.APP_VERSION}" />
+		<replace file="configs/dev/index.html" token="@VERSION_NUMBER@" value="${env.APP_VERSION}" />
+		<replace file="configs/pre/index.html" token="@VERSION_NUMBER@" value="${env.APP_VERSION}" />
+		<replace file="configs/cer/index.html" token="@VERSION_NUMBER@" value="${env.APP_VERSION}" />
+		<replace file="configs/prod/index.html" token="@VERSION_NUMBER@" value="${env.APP_VERSION}" />
+	</target>
+</project>

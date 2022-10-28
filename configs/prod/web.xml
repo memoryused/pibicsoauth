@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	<display-name>pibicsoauth</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+	<servlet>
+		<servlet-name>ParameterServlet</servlet-name>
+		<servlet-class>com.sit.pibics.oauth.web.config.parameter.servlet.ParameterServlet</servlet-class>
+		<init-param>
+			<param-name>parameterfile</param-name>
+			<param-value>/WEB-INF/parameter.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>securefile</param-name>
+			<param-value>/WEB-INF/secure.properties</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ParameterServlet</servlet-name>
+		<url-pattern>/ParameterServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Jersey RESTful Application</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<!-- Service or resources to be placed in the following package -->
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>com.sit.pibics.oauth.webservice.filter, com.sit.pibics.oauth.webservice</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Jersey RESTful Application</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+<!-- 	<filter>
+		<display-name>CORSFilter</display-name>
+		<filter-name>CORSFilter</filter-name>
+		<filter-class>com.sit.pibics.oauth.webservice.filter.CorsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CORSFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> -->
+</web-app>
